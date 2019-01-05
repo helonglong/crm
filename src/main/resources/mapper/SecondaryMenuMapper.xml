@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hll.dao.SecondaryMenuMapper">
+
+    <!--查询二级菜单-->
+    <select id="getAll" resultType="com.hll.pojo.SecondaryMenu" parameterType="map">
+        SELECT
+            d.FUNCTION_ID id,
+            d.FUNCTION_NAME name,
+            d.ICON icon,
+            d.PATH path
+        FROM
+            SYS_RIGHT a,
+            SYS_ROLE_RIGHT b,
+            SYS_FUN c,
+            SYS_FUNCTION d
+        WHERE
+            a.RIGHT_CODE = b.RF_RIGHT_CODE
+            AND a.SYS_FUN_ID = c.FUN_ID
+            AND a.SYS_CH_ID = d.FUNCTION_ID
+            AND b.RF_ROLE_ID = #{rid}
+            AND c.FUN_ID = #{mid}
+        ORDER BY
+            id ASC
+    </select>
+</mapper>

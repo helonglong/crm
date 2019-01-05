@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hll.dao.CstActivityMapper">
+  <resultMap id="BaseResultMap" type="com.hll.pojo.CstActivity">
+    <id column="ATV_ID" jdbcType="DECIMAL" property="atvId" />
+    <result column="ATV_CUST_NO" jdbcType="CHAR" property="atvCustNo" />
+    <result column="ATV_DATE" jdbcType="TIMESTAMP" property="atvDate" />
+    <result column="ATV_PLACE" jdbcType="VARCHAR" property="atvPlace" />
+    <result column="ATV_TITLE" jdbcType="VARCHAR" property="atvTitle" />
+    <result column="ATV_REMARK" jdbcType="VARCHAR" property="atvRemark" />
+    <result column="ATV_DESC" jdbcType="VARCHAR" property="atvDesc" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    ATV_ID, ATV_CUST_NO, ATV_DATE, ATV_PLACE, ATV_TITLE, ATV_REMARK, ATV_DESC
+  </sql>
+  <select id="selectByExample" parameterType="com.hll.pojo.CstActivityExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from CST_ACTIVITY
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from CST_ACTIVITY
+    where ATV_ID = #{atvId,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from CST_ACTIVITY
+    where ATV_ID = #{atvId,jdbcType=DECIMAL}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.hll.pojo.CstActivityExample">
+    delete from CST_ACTIVITY
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.hll.pojo.CstActivity">
+    insert into CST_ACTIVITY (ATV_ID, ATV_CUST_NO, ATV_DATE, 
+      ATV_PLACE, ATV_TITLE, ATV_REMARK, 
+      ATV_DESC)
+    values (#{atvId,jdbcType=DECIMAL}, #{atvCustNo,jdbcType=CHAR}, #{atvDate,jdbcType=TIMESTAMP}, 
+      #{atvPlace,jdbcType=VARCHAR}, #{atvTitle,jdbcType=VARCHAR}, #{atvRemark,jdbcType=VARCHAR}, 
+      #{atvDesc,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.hll.pojo.CstActivity">
+    insert into CST_ACTIVITY
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="atvId != null">
+        ATV_ID,
+      </if>
+      <if test="atvCustNo != null">
+        ATV_CUST_NO,
+      </if>
+      <if test="atvDate != null">
+        ATV_DATE,
+      </if>
+      <if test="atvPlace != null">
+        ATV_PLACE,
+      </if>
+      <if test="atvTitle != null">
+        ATV_TITLE,
+      </if>
+      <if test="atvRemark != null">
+        ATV_REMARK,
+      </if>
+      <if test="atvDesc != null">
+        ATV_DESC,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="atvId != null">
+        #{atvId,jdbcType=DECIMAL},
+      </if>
+      <if test="atvCustNo != null">
+        #{atvCustNo,jdbcType=CHAR},
+      </if>
+      <if test="atvDate != null">
+        #{atvDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="atvPlace != null">
+        #{atvPlace,jdbcType=VARCHAR},
+      </if>
+      <if test="atvTitle != null">
+        #{atvTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="atvRemark != null">
+        #{atvRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="atvDesc != null">
+        #{atvDesc,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.hll.pojo.CstActivityExample" resultType="java.lang.Long">
+    select count(*) from CST_ACTIVITY
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <!--查询所有-->
+    <select id="select" parameterType="string" resultMap="BaseResultMap">
+      SELECT * FROM CST_ACTIVITY where  trim(ATV_CUST_NO) = #{id}
+    </select>
+    <update id="updateByExampleSelective" parameterType="map">
+    update CST_ACTIVITY
+    <set>
+      <if test="record.atvId != null">
+        ATV_ID = #{record.atvId,jdbcType=DECIMAL},
+      </if>
+      <if test="record.atvCustNo != null">
+        ATV_CUST_NO = #{record.atvCustNo,jdbcType=CHAR},
+      </if>
+      <if test="record.atvDate != null">
+        ATV_DATE = #{record.atvDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.atvPlace != null">
+        ATV_PLACE = #{record.atvPlace,jdbcType=VARCHAR},
+      </if>
+      <if test="record.atvTitle != null">
+        ATV_TITLE = #{record.atvTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="record.atvRemark != null">
+        ATV_REMARK = #{record.atvRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.atvDesc != null">
+        ATV_DESC = #{record.atvDesc,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update CST_ACTIVITY
+    set ATV_ID = #{record.atvId,jdbcType=DECIMAL},
+      ATV_CUST_NO = #{record.atvCustNo,jdbcType=CHAR},
+      ATV_DATE = #{record.atvDate,jdbcType=TIMESTAMP},
+      ATV_PLACE = #{record.atvPlace,jdbcType=VARCHAR},
+      ATV_TITLE = #{record.atvTitle,jdbcType=VARCHAR},
+      ATV_REMARK = #{record.atvRemark,jdbcType=VARCHAR},
+      ATV_DESC = #{record.atvDesc,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hll.pojo.CstActivity">
+    update CST_ACTIVITY
+    <set>
+      <if test="atvCustNo != null">
+        ATV_CUST_NO = #{atvCustNo,jdbcType=CHAR},
+      </if>
+      <if test="atvDate != null">
+        ATV_DATE = #{atvDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="atvPlace != null">
+        ATV_PLACE = #{atvPlace,jdbcType=VARCHAR},
+      </if>
+      <if test="atvTitle != null">
+        ATV_TITLE = #{atvTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="atvRemark != null">
+        ATV_REMARK = #{atvRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="atvDesc != null">
+        ATV_DESC = #{atvDesc,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ATV_ID = #{atvId,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hll.pojo.CstActivity">
+    update CST_ACTIVITY
+    set ATV_CUST_NO = #{atvCustNo,jdbcType=CHAR},
+      ATV_DATE = #{atvDate,jdbcType=TIMESTAMP},
+      ATV_PLACE = #{atvPlace,jdbcType=VARCHAR},
+      ATV_TITLE = #{atvTitle,jdbcType=VARCHAR},
+      ATV_REMARK = #{atvRemark,jdbcType=VARCHAR},
+      ATV_DESC = #{atvDesc,jdbcType=VARCHAR}
+    where ATV_ID = #{atvId,jdbcType=DECIMAL}
+  </update>
+</mapper>

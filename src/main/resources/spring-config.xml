@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context" xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:tx="http://www.springframework.org/schema/tx" xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+    <!--1.扫描数据源交给spring IOC 容器，除了Controller层-->
+    <context:component-scan base-package="com.hll">
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+    <!--2.加载数据库配置文件-->
+    <context:property-placeholder location="classpath:jdbc.properties"/>
+    <!--3.配置c3p0连接池-->
+    <bean id="c3p0_dataSource" class="com.alibaba.druid.pool.DruidDataSource">
+        <property name="driverClassName" value="${jdbc.driverClass}"/>
+        <property name="url" value="${jdbc.url}"/>
+        <property name="username" value="${jdbc.user}"/>
+        <property name="password" value="${jdbc.pass}"/>
+    </bean>
+
+    <!--配置shiro 框架-->
+    <!--
+        配置securityManager
+    -->
+    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+        <!--
+         1.配置缓存
+        -->
+        <property name="cacheManager" ref="cacheManager" />
+        <!--
+           2.配置自定义jdbcRealm
+        -->
+        <property name="realms">
+            <list>
+                <ref bean="jdbcRealm"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean class="com.hll.Chiro.ShiroRealm" id="jdbcRealm">
+        <property name="credentialsMatcher">
+            <bean class="org.apache.shiro.authc.credential.HashedCredentialsMatcher">
+                <property name="hashAlgorithmName" value="MD5"></property>
+                <property name="hashIterations" value="1000"/>
+            </bean>
+        </property>
+    </bean>
+
+    <!--缓存-->
+    <bean id="cacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
+        <property name="cacheManagerConfigFile" value="classpath:ehcache.xml" />
+    </bean>
+
+    <!--
+        配置LifecycleBeanPostProcessor，
+        可以自动调用配置在spring IOC 容器中的shiro的生命周期方法
+    -->
+    <bean id="lifecycleBeanPostProcessor"
+          class="org.apache.shiro.spring.LifecycleBeanPostProcessor" />
+
+
+    <!--
+        启用注解，但必须在配置了lifecycleBeanPostProcessor以后
+    -->
+    <bean
+            class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"
+            depends-on="lifecycleBeanPostProcessor" />
+    <bean
+            class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+        <property name="securityManager" ref="securityManager" />
+    </bean>
+
+
+
+    <!--
+        重要：配置shiroFilter
+    -->
+    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+        <property name="securityManager" ref="securityManager" />
+        <property name="loginUrl" value="/login.jsp" />
+        <property name="successUrl" value="/index.jsp" />
+        <property name="unauthorizedUrl" value="/403.jsp" />
+        <property name="filterChainDefinitionMap" ref="filterChainDefinitionMap"/>
+    </bean>
+    <bean id="filterChainDefinitionMap" factory-bean="map" factory-method="getMap"/>
+    <bean class="com.hll.Chiro.FilterChainDefinitionMap" id="map"/>
+
+
+
+
+
+
+
+
+    <!--4.整合mybatis-->
+    <bean id="sessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!--4.1:配置spring mybatis 文件位置-->
+        <property name="configLocation" value="classpath:mybatis-config.xml"/>
+        <!--4.2:配置数据库连接池-->
+        <property name="dataSource" ref="c3p0_dataSource"/>
+        <!--4.3:指定mybatis mapper文件所在位置,扫描所有的mapper-->
+        <property name="mapperLocations" value="classpath:mapper/*.xml"/>
+        <!--4.4:分页插件PageHelper的启用-->
+        <property name="plugins">
+            <array>
+                <bean class="com.github.pagehelper.PageInterceptor">
+                    <property name="properties">
+                        <!--使用下面的方式配置参数，一行配置一个 -->
+                        <value>
+                        </value>
+                    </property>
+                </bean>
+            </array>
+        </property>
+    </bean>
+
+    <!--5.配置可以批量操作的sqlsession-->
+    <bean id="sessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+        <constructor-arg name="sqlSessionFactory" ref="sessionFactory"/>
+        <constructor-arg name="executorType" value="BATCH"/>
+    </bean>
+    <!--6.将mybatis接口的实现类加入spring IOC容器里-->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <!--扫描dao层所有的接口-->
+        <property name="basePackage" value="com.hll.dao"/>
+    </bean>
+
+    <!-- 7.配置事务-->
+    <!--7.1:开启spring的事务管理-->
+    <bean id="transactionManager"
+          class="org.springframework.jdbc.datasource.DataSourceTransactionManager"
+          p:dataSource-ref="c3p0_dataSource"/>
+
+       <!--7.2:配置事务增强-->
+       <tx:advice id="txAdvice"  transaction-manager="transactionManager">
+           <tx:attributes>
+               <!--所有方法-->
+               <tx:method name="*"/>
+               <!--get方法增强-->
+               <tx:method name="get*" read-only="true"/>
+           </tx:attributes>
+       </tx:advice>
+
+       <!--7.3:开启基于注解的事务 aop切面配置-->
+       <aop:config>
+           <!-- 切入点-->
+           <aop:pointcut expression="execution(* com.hll.service..*(..))" id="txPoint"/>
+           <!--切入面-->
+           <aop:advisor  advice-ref="txAdvice" pointcut-ref="txPoint"/>
+       </aop:config>
+
+</beans>

@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hll.dao.OrdersMapper">
+  <resultMap id="BaseResultMap" type="com.hll.pojo.Orders">
+    <id column="ODR_ID" jdbcType="DECIMAL" property="odrId" />
+    <result column="ODR_DATE" jdbcType="TIMESTAMP" property="odrDate" />
+    <result column="ODR_ADDR" jdbcType="VARCHAR" property="odrAddr" />
+    <result column="ODR_STATUS" jdbcType="CHAR" property="odrStatus" />
+    <result column="ODR_CUST_ID" jdbcType="DECIMAL" property="odrCustId" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    ODR_ID, ODR_DATE, ODR_ADDR, ODR_STATUS, ODR_CUST_ID
+  </sql>
+  <select id="selectByExample" parameterType="com.hll.pojo.OrdersExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from SSM_CRM.ORDERS
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from SSM_CRM.ORDERS
+    where ODR_ID = #{odrId,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from SSM_CRM.ORDERS
+    where ODR_ID = #{odrId,jdbcType=DECIMAL}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.hll.pojo.OrdersExample">
+    delete from SSM_CRM.ORDERS
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.hll.pojo.Orders">
+    insert into SSM_CRM.ORDERS (ODR_ID, ODR_DATE, ODR_ADDR, 
+      ODR_STATUS, ODR_CUST_ID)
+    values (#{odrId,jdbcType=DECIMAL}, #{odrDate,jdbcType=TIMESTAMP}, #{odrAddr,jdbcType=VARCHAR}, 
+      #{odrStatus,jdbcType=CHAR}, #{odrCustId,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="com.hll.pojo.Orders">
+    insert into SSM_CRM.ORDERS
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="odrId != null">
+        ODR_ID,
+      </if>
+      <if test="odrDate != null">
+        ODR_DATE,
+      </if>
+      <if test="odrAddr != null">
+        ODR_ADDR,
+      </if>
+      <if test="odrStatus != null">
+        ODR_STATUS,
+      </if>
+      <if test="odrCustId != null">
+        ODR_CUST_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="odrId != null">
+        #{odrId,jdbcType=DECIMAL},
+      </if>
+      <if test="odrDate != null">
+        #{odrDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="odrAddr != null">
+        #{odrAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="odrStatus != null">
+        #{odrStatus,jdbcType=CHAR},
+      </if>
+      <if test="odrCustId != null">
+        #{odrCustId,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.hll.pojo.OrdersExample" resultType="java.lang.Long">
+    select count(*) from SSM_CRM.ORDERS
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update SSM_CRM.ORDERS
+    <set>
+      <if test="record.odrId != null">
+        ODR_ID = #{record.odrId,jdbcType=DECIMAL},
+      </if>
+      <if test="record.odrDate != null">
+        ODR_DATE = #{record.odrDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.odrAddr != null">
+        ODR_ADDR = #{record.odrAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="record.odrStatus != null">
+        ODR_STATUS = #{record.odrStatus,jdbcType=CHAR},
+      </if>
+      <if test="record.odrCustId != null">
+        ODR_CUST_ID = #{record.odrCustId,jdbcType=DECIMAL},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update SSM_CRM.ORDERS
+    set ODR_ID = #{record.odrId,jdbcType=DECIMAL},
+      ODR_DATE = #{record.odrDate,jdbcType=TIMESTAMP},
+      ODR_ADDR = #{record.odrAddr,jdbcType=VARCHAR},
+      ODR_STATUS = #{record.odrStatus,jdbcType=CHAR},
+      ODR_CUST_ID = #{record.odrCustId,jdbcType=DECIMAL}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hll.pojo.Orders">
+    update SSM_CRM.ORDERS
+    <set>
+      <if test="odrDate != null">
+        ODR_DATE = #{odrDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="odrAddr != null">
+        ODR_ADDR = #{odrAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="odrStatus != null">
+        ODR_STATUS = #{odrStatus,jdbcType=CHAR},
+      </if>
+      <if test="odrCustId != null">
+        ODR_CUST_ID = #{odrCustId,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where ODR_ID = #{odrId,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hll.pojo.Orders">
+    update SSM_CRM.ORDERS
+    set ODR_DATE = #{odrDate,jdbcType=TIMESTAMP},
+      ODR_ADDR = #{odrAddr,jdbcType=VARCHAR},
+      ODR_STATUS = #{odrStatus,jdbcType=CHAR},
+      ODR_CUST_ID = #{odrCustId,jdbcType=DECIMAL}
+    where ODR_ID = #{odrId,jdbcType=DECIMAL}
+  </update>
+</mapper>

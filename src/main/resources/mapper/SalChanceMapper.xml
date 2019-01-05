@@ -1,0 +1,428 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hll.dao.SalChanceMapper">
+  <resultMap id="BaseResultMap" type="com.hll.pojo.SalChance">
+    <id column="CHC_ID" jdbcType="DECIMAL" property="chcId" />
+    <result column="CHC_SOURCE" jdbcType="VARCHAR" property="chcSource" />
+    <result column="CHC_CUST_NAME" jdbcType="VARCHAR" property="chcCustName" />
+    <result column="CHC_TITLE" jdbcType="VARCHAR" property="chcTitle" />
+    <result column="CHC_RATE" jdbcType="DECIMAL" property="chcRate" />
+    <result column="CHC_LINKMAN" jdbcType="VARCHAR" property="chcLinkman" />
+    <result column="CHC_TEL" jdbcType="VARCHAR" property="chcTel" />
+    <result column="CHC_DESC" jdbcType="VARCHAR" property="chcDesc" />
+    <result column="CHC_CREATE_ID" jdbcType="VARCHAR" property="chcCreateId" />
+    <result column="CHC_CREATE_BY" jdbcType="VARCHAR" property="chcCreateBy" />
+    <result column="CHC_CREATE_DATE" jdbcType="TIMESTAMP" property="chcCreateDate" />
+    <result column="CHC_DUE_ID" jdbcType="VARCHAR" property="chcDueId" />
+    <result column="CHC_DUE_TO" jdbcType="VARCHAR" property="chcDueTo" />
+    <result column="CHC_DUE_DATE" jdbcType="TIMESTAMP" property="chcDueDate" />
+    <result column="CHC_STATUS" jdbcType="DECIMAL" property="chcStatus" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    CHC_ID, CHC_SOURCE, CHC_CUST_NAME, CHC_TITLE, CHC_RATE, CHC_LINKMAN, CHC_TEL, CHC_DESC, 
+    CHC_CREATE_ID, CHC_CREATE_BY, CHC_CREATE_DATE, CHC_DUE_ID, CHC_DUE_TO, CHC_DUE_DATE, 
+    CHC_STATUS
+  </sql>
+  <select id="selectByExample" parameterType="com.hll.pojo.SalChanceExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from SAL_CHANCE
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <!--模糊查询-->
+  <select id="selectWhere" parameterType="map" resultMap="BaseResultMap">
+    SELECT * FROM SAL_CHANCE
+    <where>
+      <if test="chcCustName!=null">
+        and CHC_CUST_NAME like #{chcCustName}
+      </if>
+      <if test="chcLinkman!=null">
+        and CHC_LINKMAN like #{chcLinkman}
+      </if>
+      <if test="d1!=null">
+        and CHC_CREATE_DATE >= to_date(#{d1},'yyyy-mm-dd hh24:mi:ss')
+      </if>
+      <if test="d2!=null">
+        and CHC_CREATE_DATE
+        <![CDATA[ <= ]]>
+        to_date(#{d2},'yyyy-mm-dd hh24:mi:ss')
+      </if>
+      and CHC_STATUS=1
+    </where>
+    order by CHC_ID DESC
+  </select>
+
+  <!--模糊查询2-->
+  <select id="selectWhere2" parameterType="map" resultMap="BaseResultMap">
+    SELECT * FROM SAL_CHANCE
+    <where>
+      <if test="chcCustName!=null">
+        and CHC_CUST_NAME like #{chcCustName}
+      </if>
+      <if test="chcLinkman!=null">
+        and CHC_LINKMAN like #{chcLinkman}
+      </if>
+      <if test="chcStatus!=null">
+        and CHC_STATUS = #{chcStatus}
+      </if>
+      <if test="d1!=null">
+        and CHC_DUE_DATE >= to_date(#{d1},'yyyy-mm-dd hh24:mi:ss')
+      </if>
+      <if test="d2!=null">
+        and CHC_DUE_DATE
+        <![CDATA[ <= ]]>
+        to_date(#{d2},'yyyy-mm-dd hh24:mi:ss')
+      </if>
+
+      <if test="userId!=null">
+      and CHC_DUE_ID = #{userId}
+      </if>
+
+      and CHC_STATUS>1
+    </where>
+    order by CHC_DUE_DATE DESC
+  </select>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from SAL_CHANCE
+    where CHC_ID = #{chcId,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from SAL_CHANCE
+    where CHC_ID = #{chcId,jdbcType=DECIMAL}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.hll.pojo.SalChanceExample">
+    delete from SAL_CHANCE
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.hll.pojo.SalChance">
+    insert into SAL_CHANCE (CHC_ID, CHC_SOURCE, CHC_CUST_NAME, 
+      CHC_TITLE, CHC_RATE, CHC_LINKMAN, 
+      CHC_TEL, CHC_DESC, CHC_CREATE_ID, 
+      CHC_CREATE_BY, CHC_CREATE_DATE, CHC_DUE_ID, 
+      CHC_DUE_TO, CHC_DUE_DATE, CHC_STATUS
+      )
+    values (#{chcId,jdbcType=DECIMAL}, #{chcSource,jdbcType=VARCHAR}, #{chcCustName,jdbcType=VARCHAR}, 
+      #{chcTitle,jdbcType=VARCHAR}, #{chcRate,jdbcType=DECIMAL}, #{chcLinkman,jdbcType=VARCHAR}, 
+      #{chcTel,jdbcType=VARCHAR}, #{chcDesc,jdbcType=VARCHAR}, #{chcCreateId,jdbcType=VARCHAR}, 
+      #{chcCreateBy,jdbcType=VARCHAR}, #{chcCreateDate,jdbcType=TIMESTAMP}, #{chcDueId,jdbcType=VARCHAR}, 
+      #{chcDueTo,jdbcType=VARCHAR}, #{chcDueDate,jdbcType=TIMESTAMP}, #{chcStatus,jdbcType=DECIMAL}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.hll.pojo.SalChance">
+    insert into SAL_CHANCE
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+        CHC_ID,
+      <if test="chcSource != null">
+        CHC_SOURCE,
+      </if>
+      <if test="chcCustName != null">
+        CHC_CUST_NAME,
+      </if>
+      <if test="chcTitle != null">
+        CHC_TITLE,
+      </if>
+      <if test="chcRate != null">
+        CHC_RATE,
+      </if>
+      <if test="chcLinkman != null">
+        CHC_LINKMAN,
+      </if>
+      <if test="chcTel != null">
+        CHC_TEL,
+      </if>
+      <if test="chcDesc != null">
+        CHC_DESC,
+      </if>
+      <if test="chcCreateId != null">
+        CHC_CREATE_ID,
+      </if>
+      <if test="chcCreateBy != null">
+        CHC_CREATE_BY,
+      </if>
+      <if test="chcCreateDate != null">
+        CHC_CREATE_DATE,
+      </if>
+      <if test="chcDueId != null">
+        CHC_DUE_ID,
+      </if>
+      <if test="chcDueTo != null">
+        CHC_DUE_TO,
+      </if>
+      <if test="chcDueDate != null">
+        CHC_DUE_DATE,
+      </if>
+      <if test="chcStatus != null">
+        CHC_STATUS,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+
+        SAL.nextval,
+
+      <if test="chcSource != null">
+        #{chcSource,jdbcType=VARCHAR},
+      </if>
+      <if test="chcCustName != null">
+        #{chcCustName,jdbcType=VARCHAR},
+      </if>
+      <if test="chcTitle != null">
+        #{chcTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="chcRate != null">
+        #{chcRate,jdbcType=DECIMAL},
+      </if>
+      <if test="chcLinkman != null">
+        #{chcLinkman,jdbcType=VARCHAR},
+      </if>
+      <if test="chcTel != null">
+        #{chcTel,jdbcType=VARCHAR},
+      </if>
+      <if test="chcDesc != null">
+        #{chcDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="chcCreateId != null">
+        #{chcCreateId,jdbcType=VARCHAR},
+      </if>
+      <if test="chcCreateBy != null">
+        #{chcCreateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="chcCreateDate != null">
+        #{chcCreateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="chcDueId != null">
+        #{chcDueId,jdbcType=VARCHAR},
+      </if>
+      <if test="chcDueTo != null">
+        #{chcDueTo,jdbcType=VARCHAR},
+      </if>
+      <if test="chcDueDate != null">
+        #{chcDueDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="chcStatus != null">
+        #{chcStatus,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.hll.pojo.SalChanceExample" resultType="java.lang.Long">
+    select count(*) from SAL_CHANCE
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update SAL_CHANCE
+    <set>
+      <if test="record.chcId != null">
+        CHC_ID = #{record.chcId,jdbcType=DECIMAL},
+      </if>
+      <if test="record.chcSource != null">
+        CHC_SOURCE = #{record.chcSource,jdbcType=VARCHAR},
+      </if>
+      <if test="record.chcCustName != null">
+        CHC_CUST_NAME = #{record.chcCustName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.chcTitle != null">
+        CHC_TITLE = #{record.chcTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="record.chcRate != null">
+        CHC_RATE = #{record.chcRate,jdbcType=DECIMAL},
+      </if>
+      <if test="record.chcLinkman != null">
+        CHC_LINKMAN = #{record.chcLinkman,jdbcType=VARCHAR},
+      </if>
+      <if test="record.chcTel != null">
+        CHC_TEL = #{record.chcTel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.chcDesc != null">
+        CHC_DESC = #{record.chcDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="record.chcCreateId != null">
+        CHC_CREATE_ID = #{record.chcCreateId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.chcCreateBy != null">
+        CHC_CREATE_BY = #{record.chcCreateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.chcCreateDate != null">
+        CHC_CREATE_DATE = #{record.chcCreateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.chcDueId != null">
+        CHC_DUE_ID = #{record.chcDueId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.chcDueTo != null">
+        CHC_DUE_TO = #{record.chcDueTo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.chcDueDate != null">
+        CHC_DUE_DATE = #{record.chcDueDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.chcStatus != null">
+        CHC_STATUS = #{record.chcStatus,jdbcType=DECIMAL},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update SAL_CHANCE
+    set CHC_ID = #{record.chcId,jdbcType=DECIMAL},
+      CHC_SOURCE = #{record.chcSource,jdbcType=VARCHAR},
+      CHC_CUST_NAME = #{record.chcCustName,jdbcType=VARCHAR},
+      CHC_TITLE = #{record.chcTitle,jdbcType=VARCHAR},
+      CHC_RATE = #{record.chcRate,jdbcType=DECIMAL},
+      CHC_LINKMAN = #{record.chcLinkman,jdbcType=VARCHAR},
+      CHC_TEL = #{record.chcTel,jdbcType=VARCHAR},
+      CHC_DESC = #{record.chcDesc,jdbcType=VARCHAR},
+      CHC_CREATE_ID = #{record.chcCreateId,jdbcType=VARCHAR},
+      CHC_CREATE_BY = #{record.chcCreateBy,jdbcType=VARCHAR},
+      CHC_CREATE_DATE = #{record.chcCreateDate,jdbcType=TIMESTAMP},
+      CHC_DUE_ID = #{record.chcDueId,jdbcType=VARCHAR},
+      CHC_DUE_TO = #{record.chcDueTo,jdbcType=VARCHAR},
+      CHC_DUE_DATE = #{record.chcDueDate,jdbcType=TIMESTAMP},
+      CHC_STATUS = #{record.chcStatus,jdbcType=DECIMAL}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hll.pojo.SalChance">
+    update SAL_CHANCE
+    <set>
+      <if test="chcSource != null">
+        CHC_SOURCE = #{chcSource,jdbcType=VARCHAR},
+      </if>
+      <if test="chcCustName != null">
+        CHC_CUST_NAME = #{chcCustName,jdbcType=VARCHAR},
+      </if>
+      <if test="chcTitle != null">
+        CHC_TITLE = #{chcTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="chcRate != null">
+        CHC_RATE = #{chcRate,jdbcType=DECIMAL},
+      </if>
+      <if test="chcLinkman != null">
+        CHC_LINKMAN = #{chcLinkman,jdbcType=VARCHAR},
+      </if>
+      <if test="chcTel != null">
+        CHC_TEL = #{chcTel,jdbcType=VARCHAR},
+      </if>
+      <if test="chcDesc != null">
+        CHC_DESC = #{chcDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="chcCreateId != null">
+        CHC_CREATE_ID = #{chcCreateId,jdbcType=VARCHAR},
+      </if>
+      <if test="chcCreateBy != null">
+        CHC_CREATE_BY = #{chcCreateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="chcCreateDate != null">
+        CHC_CREATE_DATE = #{chcCreateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="chcDueId != null">
+        CHC_DUE_ID = #{chcDueId,jdbcType=VARCHAR},
+      </if>
+      <if test="chcDueTo != null">
+        CHC_DUE_TO = #{chcDueTo,jdbcType=VARCHAR},
+      </if>
+        CHC_DUE_DATE = sysdate,
+      <if test="chcStatus != null">
+        CHC_STATUS = #{chcStatus,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where CHC_ID = #{chcId,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hll.pojo.SalChance">
+    update SAL_CHANCE
+    set CHC_SOURCE = #{chcSource,jdbcType=VARCHAR},
+      CHC_CUST_NAME = #{chcCustName,jdbcType=VARCHAR},
+      CHC_TITLE = #{chcTitle,jdbcType=VARCHAR},
+      CHC_RATE = #{chcRate,jdbcType=DECIMAL},
+      CHC_LINKMAN = #{chcLinkman,jdbcType=VARCHAR},
+      CHC_TEL = #{chcTel,jdbcType=VARCHAR},
+      CHC_DESC = #{chcDesc,jdbcType=VARCHAR},
+      CHC_CREATE_ID = #{chcCreateId,jdbcType=VARCHAR},
+      CHC_CREATE_BY = #{chcCreateBy,jdbcType=VARCHAR},
+      CHC_CREATE_DATE = #{chcCreateDate,jdbcType=TIMESTAMP},
+      CHC_DUE_ID = #{chcDueId,jdbcType=VARCHAR},
+      CHC_DUE_TO = #{chcDueTo,jdbcType=VARCHAR},
+      CHC_DUE_DATE = #{chcDueDate,jdbcType=TIMESTAMP},
+      CHC_STATUS = #{chcStatus,jdbcType=DECIMAL}
+    where CHC_ID = #{chcId,jdbcType=DECIMAL}
+  </update>
+  <!--修改状态-->
+  <update id="updateSate" parameterType="map">
+    UPDATE SAL_CHANCE SET
+      CHC_STATUS=#{sate}
+    where CHC_ID = #{id}
+  </update>
+</mapper>

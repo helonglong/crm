@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hll.dao.SalPlanMapper">
+  <resultMap id="BaseResultMap" type="com.hll.pojo.SalPlan">
+    <id column="PLA_ID" jdbcType="DECIMAL" property="plaId" />
+    <result column="PLA_CHC_ID" jdbcType="DECIMAL" property="plaChcId" />
+    <result column="PLA_DATE" jdbcType="TIMESTAMP" property="plaDate" />
+    <result column="PLA_TODO" jdbcType="VARCHAR" property="plaTodo" />
+    <result column="PLA_RESULT" jdbcType="VARCHAR" property="plaResult" />
+    <association property="salChance" javaType="com.hll.pojo.SalChance">
+      <id column="CHC_ID" jdbcType="DECIMAL" property="chcId" />
+      <result column="CHC_SOURCE" jdbcType="VARCHAR" property="chcSource" />
+      <result column="CHC_CUST_NAME" jdbcType="VARCHAR" property="chcCustName" />
+      <result column="CHC_TITLE" jdbcType="VARCHAR" property="chcTitle" />
+      <result column="CHC_RATE" jdbcType="DECIMAL" property="chcRate" />
+      <result column="CHC_LINKMAN" jdbcType="VARCHAR" property="chcLinkman" />
+      <result column="CHC_TEL" jdbcType="VARCHAR" property="chcTel" />
+      <result column="CHC_DESC" jdbcType="VARCHAR" property="chcDesc" />
+      <result column="CHC_CREATE_ID" jdbcType="VARCHAR" property="chcCreateId" />
+      <result column="CHC_CREATE_BY" jdbcType="VARCHAR" property="chcCreateBy" />
+      <result column="CHC_CREATE_DATE" jdbcType="TIMESTAMP" property="chcCreateDate" />
+      <result column="CHC_DUE_ID" jdbcType="VARCHAR" property="chcDueId" />
+      <result column="CHC_DUE_TO" jdbcType="VARCHAR" property="chcDueTo" />
+      <result column="CHC_DUE_DATE" jdbcType="TIMESTAMP" property="chcDueDate" />
+      <result column="CHC_STATUS" jdbcType="DECIMAL" property="chcStatus" />
+    </association>
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+      and PLA_CHC_ID=CHC_ID
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    PLA_ID, PLA_CHC_ID, PLA_DATE, PLA_TODO, PLA_RESULT
+  </sql>
+
+
+  <select id="selectByExample" parameterType="com.hll.pojo.SalPlanExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    *
+    from SAL_PLAN,SAL_CHANCE
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    * from SAL_PLAN,SAL_CHANCE
+    where
+      PLA_CHC_ID=CHC_ID AND
+      PLA_CHC_ID = #{plaId,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from SAL_PLAN
+    where PLA_ID = #{plaId,jdbcType=DECIMAL}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.hll.pojo.SalPlanExample">
+    delete from SAL_PLAN
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.hll.pojo.SalPlan">
+    insert into SAL_PLAN (PLA_ID, PLA_CHC_ID, PLA_DATE, 
+      PLA_TODO, PLA_RESULT)
+    values (#{plaId,jdbcType=DECIMAL}, #{plaChcId,jdbcType=DECIMAL}, #{plaDate,jdbcType=TIMESTAMP}, 
+      #{plaTodo,jdbcType=VARCHAR}, #{plaResult,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.hll.pojo.SalPlan">
+    insert into SAL_PLAN
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="plaId != null">
+        PLA_ID,
+      </if>
+      <if test="plaChcId != null">
+        PLA_CHC_ID,
+      </if>
+      <if test="plaDate != null">
+        PLA_DATE,
+      </if>
+      <if test="plaTodo != null">
+        PLA_TODO,
+      </if>
+      <if test="plaResult != null">
+        PLA_RESULT,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="plaId != null">
+        #{plaId,jdbcType=DECIMAL},
+      </if>
+      <if test="plaChcId != null">
+        #{plaChcId,jdbcType=DECIMAL},
+      </if>
+      <if test="plaDate != null">
+        #{plaDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="plaTodo != null">
+        #{plaTodo,jdbcType=VARCHAR},
+      </if>
+      <if test="plaResult != null">
+        #{plaResult,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <!--制定计划-->
+  <insert id="insertOne" parameterType="map">
+      INSERT INTO SAL_PLAN
+        (PLA_ID,PLA_CHC_ID,PLA_TODO)
+              VALUES (SAL.nextval,#{id},#{text})
+  </insert>
+  <select id="countByExample" parameterType="com.hll.pojo.SalPlanExample" resultType="java.lang.Long">
+    select count(*) from SAL_PLAN
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update SAL_PLAN
+    <set>
+      <if test="record.plaId != null">
+        PLA_ID = #{record.plaId,jdbcType=DECIMAL},
+      </if>
+      <if test="record.plaChcId != null">
+        PLA_CHC_ID = #{record.plaChcId,jdbcType=DECIMAL},
+      </if>
+      <if test="record.plaDate != null">
+        PLA_DATE = #{record.plaDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.plaTodo != null">
+        PLA_TODO = #{record.plaTodo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.plaResult != null">
+        PLA_RESULT = #{record.plaResult,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update SAL_PLAN
+    set PLA_ID = #{record.plaId,jdbcType=DECIMAL},
+      PLA_CHC_ID = #{record.plaChcId,jdbcType=DECIMAL},
+      PLA_DATE = #{record.plaDate,jdbcType=TIMESTAMP},
+      PLA_TODO = #{record.plaTodo,jdbcType=VARCHAR},
+      PLA_RESULT = #{record.plaResult,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hll.pojo.SalPlan">
+    update SAL_PLAN
+    <set>
+      <if test="plaChcId != null">
+        PLA_CHC_ID = #{plaChcId,jdbcType=DECIMAL},
+      </if>
+      <if test="plaDate != null">
+        PLA_DATE = #{plaDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="plaTodo != null">
+        PLA_TODO = #{plaTodo,jdbcType=VARCHAR},
+      </if>
+      <if test="plaResult != null">
+        PLA_RESULT = #{plaResult,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where PLA_ID = #{plaId,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hll.pojo.SalPlan">
+    update SAL_PLAN
+    set PLA_CHC_ID = #{plaChcId,jdbcType=DECIMAL},
+      PLA_DATE = #{plaDate,jdbcType=TIMESTAMP},
+      PLA_TODO = #{plaTodo,jdbcType=VARCHAR},
+      PLA_RESULT = #{plaResult,jdbcType=VARCHAR}
+    where PLA_ID = #{plaId,jdbcType=DECIMAL}
+  </update>
+  <!--执行计划-->
+  <update id="updateOne" parameterType="map">
+    UPDATE SAL_PLAN SET
+      PLA_RESULT=#{text},
+      PLA_DATE = sysdate
+    where PLA_CHC_ID = #{id}
+  </update>
+</mapper>

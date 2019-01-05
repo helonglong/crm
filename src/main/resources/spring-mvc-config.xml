@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+    <!--1.扫描数据源,只包含controller层-->
+    <context:component-scan base-package="com.hll" use-default-filters="false"><!--取消路径下全扫描-->
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+    <!--2.视图解析器-->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <!--2.1:前缀-->
+        <property name="prefix" value="/WEB-INF/jsp/"/>
+        <!--2.2:后缀-->
+        <property name="suffix" value=".jsp"/>
+    </bean>
+    <!--开启静态资源的访问-->
+    <mvc:resources location="/static/" mapping="/static/**"/>
+    <!--3.将spring mvc 不能处理的静态资源交给tomcat处理-->
+    <mvc:default-servlet-handler/>
+    <!--4.开启spring mvc更高级的一些功能：JSR303校验-->
+    <mvc:annotation-driven/>
+</beans>

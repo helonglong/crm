@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hll.dao.EchartsMapper">
+
+  <!--用户信用-->
+  <select id="credit" resultType="com.hll.utils.echarts.Elist">
+    SELECT
+      b.DICT_ITEM name,
+      COUNT( * ) value
+    FROM
+      CST_CUSTOMER c,
+      BAS_DICT b
+    WHERE
+      b.DICT_TYPE = '客户信用度'
+      AND c.CUST_CREDIT=b.DICT_ID
+    GROUP BY
+      b.DICT_ITEM
+  </select>
+  <!--客户等级-->
+  <select id="grade" resultType="com.hll.utils.echarts.Elist">
+    SELECT
+      b.DICT_ITEM name,
+      COUNT( * ) value
+    FROM
+      CST_CUSTOMER c,
+      BAS_DICT b
+    WHERE
+      b.DICT_TYPE = '企业客户等级'
+      AND c.CUST_LEVEL=b.DICT_VALUE
+    GROUP BY
+      b.DICT_ITEM
+  </select>
+
+  <!--按客户满意度-->
+  <select id="satisfaction" resultType="com.hll.utils.echarts.Elist">
+    SELECT
+      b.DICT_ITEM name,
+      COUNT( * ) value
+    FROM
+      CST_CUSTOMER c,
+      BAS_DICT b
+    WHERE
+      b.DICT_TYPE = '客户满意度'
+      AND c.CUST_SATISFY=b.DICT_ID
+    GROUP BY
+      b.DICT_ITEM
+  </select>
+  <!--按客户地区分布-->
+  <select id="area" resultType="com.hll.utils.echarts.Elist">
+    SELECT
+      b.DICT_ITEM name,
+      COUNT( * ) value
+    FROM
+      CST_CUSTOMER c,
+      BAS_DICT b
+    WHERE
+      b.DICT_TYPE = '地区'
+      AND c.CUST_REGION=b.DICT_ID
+    GROUP BY
+      b.DICT_ITEM
+  </select>
+  <!--全部客户贡献 前十-->
+  <select id="customerContribution" resultType="com.hll.utils.echarts.Elist">
+    SELECT * FROM(
+    SELECT A.*,ROWNUM n FROM(
+    SELECT
+    c.CUST_ID 客户id,
+    c.CUST_NAME name,
+    SUM(p.PROD_PRICE*a.ODD_COUNT) value
+    FROM
+    ORDERS_LINE a,
+    ORDERS b,
+    CST_CUSTOMER c,
+    PRODUCT p
+    WHERE
+    b.ODR_ID = a.ODD_ORDER_ID AND
+    b.ODR_CUST_ID=c.CUST_ID AND
+    p.PROD_ID = a.ODD_PROD_ID
+    GROUP BY c.CUST_ID,c.CUST_NAME
+    ORDER BY value DESC
+    ) A
+    ) WHERE <![CDATA[ n<=20 ]]>
+
+  </select>
+
+  <!--全部客户贡献 除前十 其他-->
+  <select id="customerContribution2" resultType="java.lang.Integer">
+    SELECT
+      SUM( value ) value
+    FROM
+      (
+        SELECT
+          *
+        FROM
+          (
+            SELECT
+              A.*,
+              ROWNUM n
+            FROM
+              (
+                SELECT
+                  c.CUST_ID,
+                  c.CUST_NAME name,
+                  SUM( p.PROD_PRICE * a.ODD_COUNT ) value
+                FROM
+                  ORDERS_LINE a,
+                  ORDERS b,
+                  CST_CUSTOMER c,
+                  PRODUCT p
+                WHERE
+                  b.ODR_ID = a.ODD_ORDER_ID
+                  AND b.ODR_CUST_ID = c.CUST_ID
+                  AND p.PROD_ID = a.ODD_PROD_ID
+                GROUP BY
+                  c.CUST_ID,
+                  c.CUST_NAME
+                ORDER BY
+                  value DESC
+              ) A
+          )
+        WHERE
+          n > 20
+      )
+  </select>
+  <!--获取所有分组年份-->
+  <select id="years" resultType="java.lang.String">
+    SELECT
+      d
+    FROM
+      ( SELECT to_number( to_char( o.ODR_DATE, 'yyyy' )) d FROM ORDERS o )
+    GROUP BY
+      d
+    ORDER BY
+      d DESC
+  </select>
+  <!--客户按年贡献度   前二十-->
+  <select id="years_n" resultType="com.hll.utils.echarts.Elist" parameterType="map">
+    SELECT * FROM(
+    SELECT A.*,ROWNUM n FROM(
+    SELECT
+    c.CUST_ID 客户id,
+    c.CUST_NAME name,
+    SUM(p.PROD_PRICE*a.ODD_COUNT) value
+    FROM
+    ORDERS_LINE a,
+    ORDERS b,
+    CST_CUSTOMER c,
+    PRODUCT p
+    WHERE
+    b.ODR_ID = a.ODD_ORDER_ID AND
+    b.ODR_CUST_ID=c.CUST_ID AND
+    p.PROD_ID = a.ODD_PROD_ID AND
+    b.ODR_DATE >=to_date( #{d1}, 'yyyy-mm-dd hh24:mi:ss' )
+    AND b.ODR_DATE
+    <![CDATA[ <=to_date( #{d2}, 'yyyy-mm-dd hh24:mi:ss' ) ]]>
+    GROUP BY c.CUST_ID,c.CUST_NAME
+    ORDER BY value DESC
+    ) A
+    ) WHERE <![CDATA[ n<=10 ]]>
+  </select>
+
+  <!--客户按年贡献度   后二十-->
+  <select id="years_n2" resultType="java.lang.Integer" parameterType="map">
+    SELECT
+    SUM( value ) value
+    FROM
+    (
+    SELECT
+    *
+    FROM
+    (
+    SELECT
+    A.*,
+    ROWNUM n
+    FROM
+    (
+    SELECT
+    c.CUST_ID,
+    c.CUST_NAME name,
+    SUM( p.PROD_PRICE * a.ODD_COUNT ) value
+    FROM
+    ORDERS_LINE a,
+    ORDERS b,
+    CST_CUSTOMER c,
+    PRODUCT p
+    WHERE
+    b.ODR_ID = a.ODD_ORDER_ID
+    AND b.ODR_CUST_ID = c.CUST_ID
+    AND p.PROD_ID = a.ODD_PROD_ID
+    AND b.ODR_DATE >=to_date( #{d1}, 'yyyy-mm-dd hh24:mi:ss' )
+    AND b.ODR_DATE <![CDATA[ <=to_date( #{d2}, 'yyyy-mm-dd hh24:mi:ss' ) ]]>
+    GROUP BY
+    c.CUST_ID,
+    c.CUST_NAME
+    ORDER BY
+    value DESC
+    ) A
+    )
+    WHERE
+    n > 20)
+  </select>
+
+
+  <!--客户流失状态分........................................0布-->
+  <select id="status" resultType="com.hll.utils.echarts.Elist">
+    SELECT
+      b.DICT_ITEM NAME,
+      COUNT( * ) VALUE
+    FROM
+      CST_LOST c,
+      BAS_DICT b
+    WHERE
+      b.DICT_TYPE = '客户流失状态'
+      AND c." LST_STATUS" = b.DICT_VALUE
+    GROUP BY
+      b.DICT_ITEM
+  </select>
+</mapper>

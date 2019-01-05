@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hll.dao.SysRightMapper">
+  <resultMap id="BaseResultMap" type="com.hll.pojo.SysRight">
+    <id column="RIGHT_CODE" jdbcType="VARCHAR" property="rightCode" />
+    <result column="RIGHT_TEXT" jdbcType="VARCHAR" property="rightText" />
+    <result column="RIGHT_URL" jdbcType="VARCHAR" property="rightUrl" />
+    <result column="RIGHT_TIP" jdbcType="VARCHAR" property="rightTip" />
+    <result column="SYS_FUN_ID" jdbcType="DECIMAL" property="sysFunId" />
+    <result column="RIGHT_TYPE" jdbcType="DECIMAL" property="rightType" />
+    <result column="SYS_CH_ID" jdbcType="DECIMAL" property="sysChId" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    RIGHT_CODE, RIGHT_TEXT, RIGHT_URL, RIGHT_TIP, SYS_FUN_ID, RIGHT_TYPE, SYS_CH_ID
+  </sql>
+  <select id="selectByExample" parameterType="com.hll.pojo.SysRightExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from SSM_CRM.SYS_RIGHT
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from SSM_CRM.SYS_RIGHT
+    where RIGHT_CODE = #{rightCode,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from SSM_CRM.SYS_RIGHT
+    where RIGHT_CODE = #{rightCode,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.hll.pojo.SysRightExample">
+    delete from SSM_CRM.SYS_RIGHT
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.hll.pojo.SysRight">
+    insert into SSM_CRM.SYS_RIGHT (RIGHT_CODE, RIGHT_TEXT, RIGHT_URL, 
+      RIGHT_TIP, SYS_FUN_ID, RIGHT_TYPE, 
+      SYS_CH_ID)
+    values (#{rightCode,jdbcType=VARCHAR}, #{rightText,jdbcType=VARCHAR}, #{rightUrl,jdbcType=VARCHAR}, 
+      #{rightTip,jdbcType=VARCHAR}, #{sysFunId,jdbcType=DECIMAL}, #{rightType,jdbcType=DECIMAL}, 
+      #{sysChId,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="com.hll.pojo.SysRight">
+    insert into SSM_CRM.SYS_RIGHT
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="rightCode != null">
+        RIGHT_CODE,
+      </if>
+      <if test="rightText != null">
+        RIGHT_TEXT,
+      </if>
+      <if test="rightUrl != null">
+        RIGHT_URL,
+      </if>
+      <if test="rightTip != null">
+        RIGHT_TIP,
+      </if>
+      <if test="sysFunId != null">
+        SYS_FUN_ID,
+      </if>
+      <if test="rightType != null">
+        RIGHT_TYPE,
+      </if>
+      <if test="sysChId != null">
+        SYS_CH_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="rightCode != null">
+        #{rightCode,jdbcType=VARCHAR},
+      </if>
+      <if test="rightText != null">
+        #{rightText,jdbcType=VARCHAR},
+      </if>
+      <if test="rightUrl != null">
+        #{rightUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="rightTip != null">
+        #{rightTip,jdbcType=VARCHAR},
+      </if>
+      <if test="sysFunId != null">
+        #{sysFunId,jdbcType=DECIMAL},
+      </if>
+      <if test="rightType != null">
+        #{rightType,jdbcType=DECIMAL},
+      </if>
+      <if test="sysChId != null">
+        #{sysChId,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.hll.pojo.SysRightExample" resultType="java.lang.Long">
+    select count(*) from SSM_CRM.SYS_RIGHT
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update SSM_CRM.SYS_RIGHT
+    <set>
+      <if test="record.rightCode != null">
+        RIGHT_CODE = #{record.rightCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.rightText != null">
+        RIGHT_TEXT = #{record.rightText,jdbcType=VARCHAR},
+      </if>
+      <if test="record.rightUrl != null">
+        RIGHT_URL = #{record.rightUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.rightTip != null">
+        RIGHT_TIP = #{record.rightTip,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sysFunId != null">
+        SYS_FUN_ID = #{record.sysFunId,jdbcType=DECIMAL},
+      </if>
+      <if test="record.rightType != null">
+        RIGHT_TYPE = #{record.rightType,jdbcType=DECIMAL},
+      </if>
+      <if test="record.sysChId != null">
+        SYS_CH_ID = #{record.sysChId,jdbcType=DECIMAL},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update SSM_CRM.SYS_RIGHT
+    set RIGHT_CODE = #{record.rightCode,jdbcType=VARCHAR},
+      RIGHT_TEXT = #{record.rightText,jdbcType=VARCHAR},
+      RIGHT_URL = #{record.rightUrl,jdbcType=VARCHAR},
+      RIGHT_TIP = #{record.rightTip,jdbcType=VARCHAR},
+      SYS_FUN_ID = #{record.sysFunId,jdbcType=DECIMAL},
+      RIGHT_TYPE = #{record.rightType,jdbcType=DECIMAL},
+      SYS_CH_ID = #{record.sysChId,jdbcType=DECIMAL}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hll.pojo.SysRight">
+    update SSM_CRM.SYS_RIGHT
+    <set>
+      <if test="rightText != null">
+        RIGHT_TEXT = #{rightText,jdbcType=VARCHAR},
+      </if>
+      <if test="rightUrl != null">
+        RIGHT_URL = #{rightUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="rightTip != null">
+        RIGHT_TIP = #{rightTip,jdbcType=VARCHAR},
+      </if>
+      <if test="sysFunId != null">
+        SYS_FUN_ID = #{sysFunId,jdbcType=DECIMAL},
+      </if>
+      <if test="rightType != null">
+        RIGHT_TYPE = #{rightType,jdbcType=DECIMAL},
+      </if>
+      <if test="sysChId != null">
+        SYS_CH_ID = #{sysChId,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where RIGHT_CODE = #{rightCode,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hll.pojo.SysRight">
+    update SSM_CRM.SYS_RIGHT
+    set RIGHT_TEXT = #{rightText,jdbcType=VARCHAR},
+      RIGHT_URL = #{rightUrl,jdbcType=VARCHAR},
+      RIGHT_TIP = #{rightTip,jdbcType=VARCHAR},
+      SYS_FUN_ID = #{sysFunId,jdbcType=DECIMAL},
+      RIGHT_TYPE = #{rightType,jdbcType=DECIMAL},
+      SYS_CH_ID = #{sysChId,jdbcType=DECIMAL}
+    where RIGHT_CODE = #{rightCode,jdbcType=VARCHAR}
+  </update>
+</mapper>

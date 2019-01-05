@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hll.dao.CstLostMapper">
+  <resultMap id="BaseResultMap" type="com.hll.pojo.CstLost">
+    <id column="LST_ID" jdbcType="DECIMAL" property="lstId" />
+    <result column="LST_CUST_NO" jdbcType="VARCHAR" property="lstCustNo" />
+    <result column="LST_CUST_NAME" jdbcType="VARCHAR" property="lstCustName" />
+    <result column="LST_CUST_MANAGER_ID" jdbcType="VARCHAR" property="lstCustManagerId" />
+    <result column="LST_CUST_MANAGER_NAME" jdbcType="VARCHAR" property="lstCustManagerName" />
+    <result column="LST_LAST_ORDER_DATE" jdbcType="TIMESTAMP" property="lstLastOrderDate" />
+    <result column="LST_LOST_DATE" jdbcType="TIMESTAMP" property="lstLostDate" />
+    <result column="LST_DELAY" jdbcType="VARCHAR" property="lstDelay" />
+    <result column="LST_REASON" jdbcType="VARCHAR" property="lstReason" />
+    <result column=" LST_STATUS" jdbcType="DECIMAL" property="lstStatus" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    LST_ID, LST_CUST_NO, LST_CUST_NAME, LST_CUST_MANAGER_ID, LST_CUST_MANAGER_NAME, LST_LAST_ORDER_DATE, 
+    LST_LOST_DATE, LST_DELAY, LST_REASON, " LST_STATUS"
+  </sql>
+  <select id="selectByExample" parameterType="com.hll.pojo.CstLostExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from SSM_CRM.CST_LOST
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from SSM_CRM.CST_LOST
+    where LST_ID = #{lstId,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from SSM_CRM.CST_LOST
+    where LST_ID = #{lstId,jdbcType=DECIMAL}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.hll.pojo.CstLostExample">
+    delete from SSM_CRM.CST_LOST
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.hll.pojo.CstLost">
+    insert into SSM_CRM.CST_LOST (LST_ID, LST_CUST_NO, LST_CUST_NAME, 
+      LST_CUST_MANAGER_ID, LST_CUST_MANAGER_NAME, LST_LAST_ORDER_DATE, 
+      LST_LOST_DATE, LST_DELAY, LST_REASON, 
+      " LST_STATUS")
+    values (#{lstId,jdbcType=DECIMAL}, #{lstCustNo,jdbcType=VARCHAR}, #{lstCustName,jdbcType=VARCHAR}, 
+      #{lstCustManagerId,jdbcType=VARCHAR}, #{lstCustManagerName,jdbcType=VARCHAR}, #{lstLastOrderDate,jdbcType=TIMESTAMP}, 
+      #{lstLostDate,jdbcType=TIMESTAMP}, #{lstDelay,jdbcType=VARCHAR}, #{lstReason,jdbcType=VARCHAR}, 
+      #{lstStatus,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="com.hll.pojo.CstLost">
+    insert into SSM_CRM.CST_LOST
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="lstId != null">
+        LST_ID,
+      </if>
+      <if test="lstCustNo != null">
+        LST_CUST_NO,
+      </if>
+      <if test="lstCustName != null">
+        LST_CUST_NAME,
+      </if>
+      <if test="lstCustManagerId != null">
+        LST_CUST_MANAGER_ID,
+      </if>
+      <if test="lstCustManagerName != null">
+        LST_CUST_MANAGER_NAME,
+      </if>
+      <if test="lstLastOrderDate != null">
+        LST_LAST_ORDER_DATE,
+      </if>
+      <if test="lstLostDate != null">
+        LST_LOST_DATE,
+      </if>
+      <if test="lstDelay != null">
+        LST_DELAY,
+      </if>
+      <if test="lstReason != null">
+        LST_REASON,
+      </if>
+      <if test="lstStatus != null">
+        " LST_STATUS",
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="lstId != null">
+        #{lstId,jdbcType=DECIMAL},
+      </if>
+      <if test="lstCustNo != null">
+        #{lstCustNo,jdbcType=VARCHAR},
+      </if>
+      <if test="lstCustName != null">
+        #{lstCustName,jdbcType=VARCHAR},
+      </if>
+      <if test="lstCustManagerId != null">
+        #{lstCustManagerId,jdbcType=VARCHAR},
+      </if>
+      <if test="lstCustManagerName != null">
+        #{lstCustManagerName,jdbcType=VARCHAR},
+      </if>
+      <if test="lstLastOrderDate != null">
+        #{lstLastOrderDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lstLostDate != null">
+        #{lstLostDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lstDelay != null">
+        #{lstDelay,jdbcType=VARCHAR},
+      </if>
+      <if test="lstReason != null">
+        #{lstReason,jdbcType=VARCHAR},
+      </if>
+      <if test="lstStatus != null">
+        #{lstStatus,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.hll.pojo.CstLostExample" resultType="java.lang.Long">
+    select count(*) from SSM_CRM.CST_LOST
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update SSM_CRM.CST_LOST
+    <set>
+      <if test="record.lstId != null">
+        LST_ID = #{record.lstId,jdbcType=DECIMAL},
+      </if>
+      <if test="record.lstCustNo != null">
+        LST_CUST_NO = #{record.lstCustNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.lstCustName != null">
+        LST_CUST_NAME = #{record.lstCustName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.lstCustManagerId != null">
+        LST_CUST_MANAGER_ID = #{record.lstCustManagerId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.lstCustManagerName != null">
+        LST_CUST_MANAGER_NAME = #{record.lstCustManagerName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.lstLastOrderDate != null">
+        LST_LAST_ORDER_DATE = #{record.lstLastOrderDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.lstLostDate != null">
+        LST_LOST_DATE = #{record.lstLostDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.lstDelay != null">
+        LST_DELAY = #{record.lstDelay,jdbcType=VARCHAR},
+      </if>
+      <if test="record.lstReason != null">
+        LST_REASON = #{record.lstReason,jdbcType=VARCHAR},
+      </if>
+      <if test="record.lstStatus != null">
+        " LST_STATUS" = #{record.lstStatus,jdbcType=DECIMAL},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update SSM_CRM.CST_LOST
+    set LST_ID = #{record.lstId,jdbcType=DECIMAL},
+      LST_CUST_NO = #{record.lstCustNo,jdbcType=VARCHAR},
+      LST_CUST_NAME = #{record.lstCustName,jdbcType=VARCHAR},
+      LST_CUST_MANAGER_ID = #{record.lstCustManagerId,jdbcType=VARCHAR},
+      LST_CUST_MANAGER_NAME = #{record.lstCustManagerName,jdbcType=VARCHAR},
+      LST_LAST_ORDER_DATE = #{record.lstLastOrderDate,jdbcType=TIMESTAMP},
+      LST_LOST_DATE = #{record.lstLostDate,jdbcType=TIMESTAMP},
+      LST_DELAY = #{record.lstDelay,jdbcType=VARCHAR},
+      LST_REASON = #{record.lstReason,jdbcType=VARCHAR},
+      " LST_STATUS" = #{record.lstStatus,jdbcType=DECIMAL}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hll.pojo.CstLost">
+    update SSM_CRM.CST_LOST
+    <set>
+      <if test="lstCustNo != null">
+        LST_CUST_NO = #{lstCustNo,jdbcType=VARCHAR},
+      </if>
+      <if test="lstCustName != null">
+        LST_CUST_NAME = #{lstCustName,jdbcType=VARCHAR},
+      </if>
+      <if test="lstCustManagerId != null">
+        LST_CUST_MANAGER_ID = #{lstCustManagerId,jdbcType=VARCHAR},
+      </if>
+      <if test="lstCustManagerName != null">
+        LST_CUST_MANAGER_NAME = #{lstCustManagerName,jdbcType=VARCHAR},
+      </if>
+      <if test="lstLastOrderDate != null">
+        LST_LAST_ORDER_DATE = #{lstLastOrderDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lstLostDate != null">
+        LST_LOST_DATE = #{lstLostDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lstDelay != null">
+        LST_DELAY = #{lstDelay,jdbcType=VARCHAR},
+      </if>
+      <if test="lstReason != null">
+        LST_REASON = #{lstReason,jdbcType=VARCHAR},
+      </if>
+      <if test="lstStatus != null">
+        " LST_STATUS" = #{lstStatus,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where LST_ID = #{lstId,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hll.pojo.CstLost">
+    update SSM_CRM.CST_LOST
+    set LST_CUST_NO = #{lstCustNo,jdbcType=VARCHAR},
+      LST_CUST_NAME = #{lstCustName,jdbcType=VARCHAR},
+      LST_CUST_MANAGER_ID = #{lstCustManagerId,jdbcType=VARCHAR},
+      LST_CUST_MANAGER_NAME = #{lstCustManagerName,jdbcType=VARCHAR},
+      LST_LAST_ORDER_DATE = #{lstLastOrderDate,jdbcType=TIMESTAMP},
+      LST_LOST_DATE = #{lstLostDate,jdbcType=TIMESTAMP},
+      LST_DELAY = #{lstDelay,jdbcType=VARCHAR},
+      LST_REASON = #{lstReason,jdbcType=VARCHAR},
+      " LST_STATUS" = #{lstStatus,jdbcType=DECIMAL}
+    where LST_ID = #{lstId,jdbcType=DECIMAL}
+  </update>
+</mapper>

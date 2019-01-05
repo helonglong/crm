@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hll.dao.StorageMapper">
+  <resultMap id="BaseResultMap" type="com.hll.pojo.Storage">
+    <id column="STK_ID" jdbcType="DECIMAL" property="stkId" />
+    <result column="STK_PROD_ID" jdbcType="DECIMAL" property="stkProdId" />
+    <result column="STK_WAREHOUSE" jdbcType="VARCHAR" property="stkWarehouse" />
+    <result column="STK_WARE" jdbcType="VARCHAR" property="stkWare" />
+    <result column="STK_COUNT" jdbcType="DECIMAL" property="stkCount" />
+    <result column="STK_MEMO" jdbcType="VARCHAR" property="stkMemo" />
+    <association property="product" javaType="com.hll.pojo.Product">
+      <id column="PROD_ID"  property="prodId" />
+      <result column="PROD_NAME"  property="prodName" />
+      <result column="PROD_TYPE"  property="prodType" />
+      <result column="PROD_BATCH"  property="prodBatch" />
+      <result column="PROD_UNIT"  property="prodUnit" />
+      <result column="PROD_PRICE"  property="prodPrice" />
+      <result column="PROD_MEMO"  property="prodMemo" />
+    </association>
+  </resultMap>
+  <sql id="ccccc">STK_PROD_ID=PROD_ID</sql>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+      and STK_PROD_ID=PROD_ID
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    STK_ID, STK_PROD_ID, STK_WAREHOUSE, STK_WARE, STK_COUNT, STK_MEMO
+  </sql>
+  <select id="selectByExample" parameterType="com.hll.pojo.StorageExample" resultMap="BaseResultMap">
+    select * from STORAGE,PRODUCT
+    <choose>
+      <when test="_parameter != null">
+        <include refid="Example_Where_Clause" />
+      </when>
+      <otherwise>
+        WHERE STK_PROD_ID=PROD_ID
+      </otherwise>
+    </choose>
+
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from STORAGE
+    where STK_ID = #{stkId,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from STORAGE
+    where STK_ID = #{stkId,jdbcType=DECIMAL}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.hll.pojo.StorageExample">
+    delete from STORAGE
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.hll.pojo.Storage">
+    insert into STORAGE (STK_ID, STK_PROD_ID, STK_WAREHOUSE, 
+      STK_WARE, STK_COUNT, STK_MEMO
+      )
+    values (#{stkId,jdbcType=DECIMAL}, #{stkProdId,jdbcType=DECIMAL}, #{stkWarehouse,jdbcType=VARCHAR}, 
+      #{stkWare,jdbcType=VARCHAR}, #{stkCount,jdbcType=DECIMAL}, #{stkMemo,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.hll.pojo.Storage">
+    insert into STORAGE
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="stkId != null">
+        STK_ID,
+      </if>
+      <if test="stkProdId != null">
+        STK_PROD_ID,
+      </if>
+      <if test="stkWarehouse != null">
+        STK_WAREHOUSE,
+      </if>
+      <if test="stkWare != null">
+        STK_WARE,
+      </if>
+      <if test="stkCount != null">
+        STK_COUNT,
+      </if>
+      <if test="stkMemo != null">
+        STK_MEMO,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="stkId != null">
+        #{stkId,jdbcType=DECIMAL},
+      </if>
+      <if test="stkProdId != null">
+        #{stkProdId,jdbcType=DECIMAL},
+      </if>
+      <if test="stkWarehouse != null">
+        #{stkWarehouse,jdbcType=VARCHAR},
+      </if>
+      <if test="stkWare != null">
+        #{stkWare,jdbcType=VARCHAR},
+      </if>
+      <if test="stkCount != null">
+        #{stkCount,jdbcType=DECIMAL},
+      </if>
+      <if test="stkMemo != null">
+        #{stkMemo,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.hll.pojo.StorageExample" resultType="java.lang.Long">
+    select count(*) from STORAGE
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update STORAGE
+    <set>
+      <if test="record.stkId != null">
+        STK_ID = #{record.stkId,jdbcType=DECIMAL},
+      </if>
+      <if test="record.stkProdId != null">
+        STK_PROD_ID = #{record.stkProdId,jdbcType=DECIMAL},
+      </if>
+      <if test="record.stkWarehouse != null">
+        STK_WAREHOUSE = #{record.stkWarehouse,jdbcType=VARCHAR},
+      </if>
+      <if test="record.stkWare != null">
+        STK_WARE = #{record.stkWare,jdbcType=VARCHAR},
+      </if>
+      <if test="record.stkCount != null">
+        STK_COUNT = #{record.stkCount,jdbcType=DECIMAL},
+      </if>
+      <if test="record.stkMemo != null">
+        STK_MEMO = #{record.stkMemo,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update STORAGE
+    set STK_ID = #{record.stkId,jdbcType=DECIMAL},
+      STK_PROD_ID = #{record.stkProdId,jdbcType=DECIMAL},
+      STK_WAREHOUSE = #{record.stkWarehouse,jdbcType=VARCHAR},
+      STK_WARE = #{record.stkWare,jdbcType=VARCHAR},
+      STK_COUNT = #{record.stkCount,jdbcType=DECIMAL},
+      STK_MEMO = #{record.stkMemo,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hll.pojo.Storage">
+    update STORAGE
+    <set>
+      <if test="stkProdId != null">
+        STK_PROD_ID = #{stkProdId,jdbcType=DECIMAL},
+      </if>
+      <if test="stkWarehouse != null">
+        STK_WAREHOUSE = #{stkWarehouse,jdbcType=VARCHAR},
+      </if>
+      <if test="stkWare != null">
+        STK_WARE = #{stkWare,jdbcType=VARCHAR},
+      </if>
+      <if test="stkCount != null">
+        STK_COUNT = #{stkCount,jdbcType=DECIMAL},
+      </if>
+      <if test="stkMemo != null">
+        STK_MEMO = #{stkMemo,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where STK_ID = #{stkId,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hll.pojo.Storage">
+    update STORAGE
+    set STK_PROD_ID = #{stkProdId,jdbcType=DECIMAL},
+      STK_WAREHOUSE = #{stkWarehouse,jdbcType=VARCHAR},
+      STK_WARE = #{stkWare,jdbcType=VARCHAR},
+      STK_COUNT = #{stkCount,jdbcType=DECIMAL},
+      STK_MEMO = #{stkMemo,jdbcType=VARCHAR}
+    where STK_ID = #{stkId,jdbcType=DECIMAL}
+  </update>
+</mapper>

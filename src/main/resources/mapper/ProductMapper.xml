@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hll.dao.ProductMapper">
+  <resultMap id="BaseResultMap" type="com.hll.pojo.Product">
+    <id column="PROD_ID" jdbcType="DECIMAL" property="prodId" />
+    <result column="PROD_NAME" jdbcType="VARCHAR" property="prodName" />
+    <result column="PROD_TYPE" jdbcType="VARCHAR" property="prodType" />
+    <result column="PROD_BATCH" jdbcType="VARCHAR" property="prodBatch" />
+    <result column="PROD_UNIT" jdbcType="VARCHAR" property="prodUnit" />
+    <result column="PROD_PRICE" jdbcType="FLOAT" property="prodPrice" />
+    <result column="PROD_MEMO" jdbcType="VARCHAR" property="prodMemo" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    PROD_ID, PROD_NAME, PROD_TYPE, PROD_BATCH, PROD_UNIT, PROD_PRICE, PROD_MEMO
+  </sql>
+  <select id="selectByExample" parameterType="com.hll.pojo.ProductExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from PRODUCT
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from PRODUCT
+    where PROD_ID = #{prodId,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from PRODUCT
+    where PROD_ID = #{prodId,jdbcType=DECIMAL}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.hll.pojo.ProductExample">
+    delete from PRODUCT
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.hll.pojo.Product">
+    insert into PRODUCT (PROD_ID, PROD_NAME, PROD_TYPE, 
+      PROD_BATCH, PROD_UNIT, PROD_PRICE, 
+      PROD_MEMO)
+    values (#{prodId}, #{prodName}, #{prodType},
+      #{prodBatch}, #{prodUnit}, #{prodPrice},
+      #{prodMemo})
+  </insert>
+  <insert id="insertSelective" parameterType="com.hll.pojo.Product">
+    insert into PRODUCT
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="prodId != null">
+        PROD_ID,
+      </if>
+      <if test="prodName != null">
+        PROD_NAME,
+      </if>
+      <if test="prodType != null">
+        PROD_TYPE,
+      </if>
+      <if test="prodBatch != null">
+        PROD_BATCH,
+      </if>
+      <if test="prodUnit != null">
+        PROD_UNIT,
+      </if>
+      <if test="prodPrice != null">
+        PROD_PRICE,
+      </if>
+      <if test="prodMemo != null">
+        PROD_MEMO,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="prodId != null">
+        #{prodId,jdbcType=DECIMAL},
+      </if>
+      <if test="prodName != null">
+        #{prodName,jdbcType=VARCHAR},
+      </if>
+      <if test="prodType != null">
+        #{prodType,jdbcType=VARCHAR},
+      </if>
+      <if test="prodBatch != null">
+        #{prodBatch,jdbcType=VARCHAR},
+      </if>
+      <if test="prodUnit != null">
+        #{prodUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="prodPrice != null">
+        #{prodPrice,jdbcType=FLOAT},
+      </if>
+      <if test="prodMemo != null">
+        #{prodMemo,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.hll.pojo.ProductExample" resultType="java.lang.Long">
+    select count(*) from PRODUCT
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update PRODUCT
+    <set>
+      <if test="record.prodId != null">
+        PROD_ID = #{record.prodId,jdbcType=DECIMAL},
+      </if>
+      <if test="record.prodName != null">
+        PROD_NAME = #{record.prodName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.prodType != null">
+        PROD_TYPE = #{record.prodType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.prodBatch != null">
+        PROD_BATCH = #{record.prodBatch,jdbcType=VARCHAR},
+      </if>
+      <if test="record.prodUnit != null">
+        PROD_UNIT = #{record.prodUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="record.prodPrice != null">
+        PROD_PRICE = #{record.prodPrice,jdbcType=FLOAT},
+      </if>
+      <if test="record.prodMemo != null">
+        PROD_MEMO = #{record.prodMemo,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update PRODUCT
+    set PROD_ID = #{record.prodId,jdbcType=DECIMAL},
+      PROD_NAME = #{record.prodName,jdbcType=VARCHAR},
+      PROD_TYPE = #{record.prodType,jdbcType=VARCHAR},
+      PROD_BATCH = #{record.prodBatch,jdbcType=VARCHAR},
+      PROD_UNIT = #{record.prodUnit,jdbcType=VARCHAR},
+      PROD_PRICE = #{record.prodPrice,jdbcType=FLOAT},
+      PROD_MEMO = #{record.prodMemo,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hll.pojo.Product">
+    update PRODUCT
+    <set>
+      <if test="prodName != null">
+        PROD_NAME = #{prodName,jdbcType=VARCHAR},
+      </if>
+      <if test="prodType != null">
+        PROD_TYPE = #{prodType,jdbcType=VARCHAR},
+      </if>
+      <if test="prodBatch != null">
+        PROD_BATCH = #{prodBatch,jdbcType=VARCHAR},
+      </if>
+      <if test="prodUnit != null">
+        PROD_UNIT = #{prodUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="prodPrice != null">
+        PROD_PRICE = #{prodPrice,jdbcType=FLOAT},
+      </if>
+      <if test="prodMemo != null">
+        PROD_MEMO = #{prodMemo,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where PROD_ID = #{prodId,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hll.pojo.Product">
+    update PRODUCT
+    set PROD_NAME = #{prodName,jdbcType=VARCHAR},
+      PROD_TYPE = #{prodType,jdbcType=VARCHAR},
+      PROD_BATCH = #{prodBatch,jdbcType=VARCHAR},
+      PROD_UNIT = #{prodUnit,jdbcType=VARCHAR},
+      PROD_PRICE = #{prodPrice,jdbcType=FLOAT},
+      PROD_MEMO = #{prodMemo,jdbcType=VARCHAR}
+    where PROD_ID = #{prodId,jdbcType=DECIMAL}
+  </update>
+</mapper>

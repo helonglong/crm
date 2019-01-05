@@ -1,0 +1,344 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hll.dao.CstCustomerMapper">
+  <resultMap id="BaseResultMap" type="com.hll.pojo.CstCustomer">
+    <id column="CUST_ID" jdbcType="VARCHAR" property="custId" />
+    <result column="CUST_NAME" jdbcType="VARCHAR" property="custName" />
+    <result column="CUST_MANAGER_ID" jdbcType="VARCHAR" property="custManagerId" />
+    <result column="CUST_LEVEL" jdbcType="VARCHAR" property="custLevel" />
+    <result column="CUST_SATISFY" jdbcType="VARCHAR" property="custSatisfy" />
+    <result column="CUST_CREDIT" jdbcType="VARCHAR" property="custCredit" />
+    <result column="CUST_ADDR" jdbcType="VARCHAR" property="custAddr" />
+    <result column="CUST_ZIP" jdbcType="CHAR" property="custZip" />
+    <result column="CUST_TEL" jdbcType="VARCHAR" property="custTel" />
+    <result column="CUST_WEBSITE" jdbcType="VARCHAR" property="custWebsite" />
+    <result column="CUST_STATUS" jdbcType="DECIMAL" property="custStatus" />
+    <result column="CUST_REGION" jdbcType="VARCHAR" property="custRegion" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    CUST_ID, CUST_NAME, CUST_MANAGER_ID, CUST_LEVEL, CUST_SATISFY, CUST_CREDIT, CUST_ADDR, 
+    CUST_ZIP, CUST_TEL, CUST_WEBSITE, CUST_STATUS, CUST_REGION
+  </sql>
+  <select id="selectByExample" parameterType="com.hll.pojo.CstCustomerExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from CST_CUSTOMER
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from CST_CUSTOMER
+    where CUST_ID = #{custId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from CST_CUSTOMER
+    where CUST_ID = #{custId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.hll.pojo.CstCustomerExample">
+    delete from CST_CUSTOMER
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.hll.pojo.CstCustomer">
+    insert into CST_CUSTOMER (CUST_ID, CUST_NAME, CUST_MANAGER_ID, 
+      CUST_LEVEL, CUST_SATISFY, CUST_CREDIT, 
+      CUST_ADDR, CUST_ZIP, CUST_TEL, 
+      CUST_WEBSITE, CUST_STATUS, CUST_REGION
+      )
+    values (CST_CUSTOMER_ID.nextval, #{custName,jdbcType=VARCHAR}, #{custManagerId,jdbcType=VARCHAR},
+      #{custLevel,jdbcType=VARCHAR}, #{custSatisfy,jdbcType=VARCHAR}, #{custCredit,jdbcType=VARCHAR}, 
+      #{custAddr,jdbcType=VARCHAR}, #{custZip,jdbcType=CHAR}, #{custTel,jdbcType=VARCHAR}, 
+      #{custWebsite,jdbcType=VARCHAR}, #{custStatus,jdbcType=DECIMAL}, #{custRegion,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.hll.pojo.CstCustomer">
+    insert into CST_CUSTOMER
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="custId != null">
+        CUST_ID,
+      </if>
+      <if test="custName != null">
+        CUST_NAME,
+      </if>
+      <if test="custManagerId != null">
+        CUST_MANAGER_ID,
+      </if>
+      <if test="custLevel != null">
+        CUST_LEVEL,
+      </if>
+      <if test="custSatisfy != null">
+        CUST_SATISFY,
+      </if>
+      <if test="custCredit != null">
+        CUST_CREDIT,
+      </if>
+      <if test="custAddr != null">
+        CUST_ADDR,
+      </if>
+      <if test="custZip != null">
+        CUST_ZIP,
+      </if>
+      <if test="custTel != null">
+        CUST_TEL,
+      </if>
+      <if test="custWebsite != null">
+        CUST_WEBSITE,
+      </if>
+      <if test="custStatus != null">
+        CUST_STATUS,
+      </if>
+      <if test="custRegion != null">
+        CUST_REGION,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="custId != null">
+        #{custId,jdbcType=VARCHAR},
+      </if>
+      <if test="custName != null">
+        #{custName,jdbcType=VARCHAR},
+      </if>
+      <if test="custManagerId != null">
+        #{custManagerId,jdbcType=VARCHAR},
+      </if>
+      <if test="custLevel != null">
+        #{custLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="custSatisfy != null">
+        #{custSatisfy,jdbcType=VARCHAR},
+      </if>
+      <if test="custCredit != null">
+        #{custCredit,jdbcType=VARCHAR},
+      </if>
+      <if test="custAddr != null">
+        #{custAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="custZip != null">
+        #{custZip,jdbcType=CHAR},
+      </if>
+      <if test="custTel != null">
+        #{custTel,jdbcType=VARCHAR},
+      </if>
+      <if test="custWebsite != null">
+        #{custWebsite,jdbcType=VARCHAR},
+      </if>
+      <if test="custStatus != null">
+        #{custStatus,jdbcType=DECIMAL},
+      </if>
+      <if test="custRegion != null">
+        #{custRegion,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.hll.pojo.CstCustomerExample" resultType="java.lang.Long">
+    select count(*) from CST_CUSTOMER
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <!--查询全部加模糊查询-->
+  <select id="selectAll" resultMap="BaseResultMap" parameterType="map">
+    SELECT * FROM CST_CUSTOMER
+    <where>
+      <if test="name!=null">
+        and CUST_NAME=#{name}
+      </if>
+      <if test="khid!=null">
+        and CUST_MANAGER_ID=#{khid}
+      </if>
+      <if test="dqid!=null">
+        and CUST_REGION=#{dqid}
+      </if>
+      <if test="djid!=null">
+        and CUST_LEVEL=#{djid}
+      </if>
+    </where>
+    order by CUST_ID desc
+  </select>
+
+
+  <update id="updateByExampleSelective" parameterType="map">
+    update CST_CUSTOMER
+    <set>
+      <if test="record.custId != null">
+        CUST_ID = #{record.custId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.custName != null">
+        CUST_NAME = #{record.custName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.custManagerId != null">
+        CUST_MANAGER_ID = #{record.custManagerId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.custLevel != null">
+        CUST_LEVEL = #{record.custLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.custSatisfy != null">
+        CUST_SATISFY = #{record.custSatisfy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.custCredit != null">
+        CUST_CREDIT = #{record.custCredit,jdbcType=VARCHAR},
+      </if>
+      <if test="record.custAddr != null">
+        CUST_ADDR = #{record.custAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="record.custZip != null">
+        CUST_ZIP = #{record.custZip,jdbcType=CHAR},
+      </if>
+      <if test="record.custTel != null">
+        CUST_TEL = #{record.custTel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.custWebsite != null">
+        CUST_WEBSITE = #{record.custWebsite,jdbcType=VARCHAR},
+      </if>
+      <if test="record.custStatus != null">
+        CUST_STATUS = #{record.custStatus,jdbcType=DECIMAL},
+      </if>
+      <if test="record.custRegion != null">
+        CUST_REGION = #{record.custRegion,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update CST_CUSTOMER
+    set CUST_ID = #{record.custId,jdbcType=VARCHAR},
+      CUST_NAME = #{record.custName,jdbcType=VARCHAR},
+      CUST_MANAGER_ID = #{record.custManagerId,jdbcType=VARCHAR},
+      CUST_LEVEL = #{record.custLevel,jdbcType=VARCHAR},
+      CUST_SATISFY = #{record.custSatisfy,jdbcType=VARCHAR},
+      CUST_CREDIT = #{record.custCredit,jdbcType=VARCHAR},
+      CUST_ADDR = #{record.custAddr,jdbcType=VARCHAR},
+      CUST_ZIP = #{record.custZip,jdbcType=CHAR},
+      CUST_TEL = #{record.custTel,jdbcType=VARCHAR},
+      CUST_WEBSITE = #{record.custWebsite,jdbcType=VARCHAR},
+      CUST_STATUS = #{record.custStatus,jdbcType=DECIMAL},
+      CUST_REGION = #{record.custRegion,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hll.pojo.CstCustomer">
+    update CST_CUSTOMER
+    <set>
+      <if test="custName != null">
+        CUST_NAME = #{custName,jdbcType=VARCHAR},
+      </if>
+      <if test="custManagerId != null">
+        CUST_MANAGER_ID = #{custManagerId,jdbcType=VARCHAR},
+      </if>
+      <if test="custLevel != null">
+        CUST_LEVEL = #{custLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="custSatisfy != null">
+        CUST_SATISFY = #{custSatisfy,jdbcType=VARCHAR},
+      </if>
+      <if test="custCredit != null">
+        CUST_CREDIT = #{custCredit,jdbcType=VARCHAR},
+      </if>
+      <if test="custAddr != null">
+        CUST_ADDR = #{custAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="custZip != null">
+        CUST_ZIP = #{custZip,jdbcType=CHAR},
+      </if>
+      <if test="custTel != null">
+        CUST_TEL = #{custTel,jdbcType=VARCHAR},
+      </if>
+      <if test="custWebsite != null">
+        CUST_WEBSITE = #{custWebsite,jdbcType=VARCHAR},
+      </if>
+      <if test="custStatus != null">
+        CUST_STATUS = #{custStatus,jdbcType=DECIMAL},
+      </if>
+      <if test="custRegion != null">
+        CUST_REGION = #{custRegion,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where CUST_ID = #{custId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hll.pojo.CstCustomer">
+    update CST_CUSTOMER
+    set CUST_NAME = #{custName,jdbcType=VARCHAR},
+      CUST_MANAGER_ID = #{custManagerId,jdbcType=VARCHAR},
+      CUST_LEVEL = #{custLevel,jdbcType=VARCHAR},
+      CUST_SATISFY = #{custSatisfy,jdbcType=VARCHAR},
+      CUST_CREDIT = #{custCredit,jdbcType=VARCHAR},
+      CUST_ADDR = #{custAddr,jdbcType=VARCHAR},
+      CUST_ZIP = #{custZip,jdbcType=CHAR},
+      CUST_TEL = #{custTel,jdbcType=VARCHAR},
+      CUST_WEBSITE = #{custWebsite,jdbcType=VARCHAR},
+      CUST_STATUS = #{custStatus,jdbcType=DECIMAL},
+      CUST_REGION = #{custRegion,jdbcType=VARCHAR}
+    where CUST_ID = #{custId,jdbcType=VARCHAR}
+  </update>
+</mapper>

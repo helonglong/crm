@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hll.dao.SysRoleRightMapper">
+  <resultMap id="BaseResultMap" type="com.hll.pojo.SysRoleRight">
+    <id column="RF_ID" jdbcType="DECIMAL" property="rfId" />
+    <result column="RF_ROLE_ID" jdbcType="DECIMAL" property="rfRoleId" />
+    <result column="RF_RIGHT_CODE" jdbcType="DECIMAL" property="rfRightCode" />
+  </resultMap>
+
+  <resultMap id="CompetenceMap" extends="BaseResultMap" type="com.hll.pojo.SysRoleRight">
+    <association property="sysRight" javaType="com.hll.pojo.SysRight">
+      <id column="RIGHT_CODE" jdbcType="VARCHAR" property="rightCode" />
+      <result column="RIGHT_TEXT" jdbcType="VARCHAR" property="rightText" />
+      <result column="RIGHT_URL" jdbcType="VARCHAR" property="rightUrl" />
+      <result column="RIGHT_TIP" jdbcType="VARCHAR" property="rightTip" />
+      <result column="SYS_FUN_ID" jdbcType="DECIMAL" property="sysFunId" />
+      <result column="RIGHT_TYPE" jdbcType="DECIMAL" property="rightType" />
+      <result column="SYS_CH_ID" jdbcType="DECIMAL" property="sysChId" />
+    </association>
+  </resultMap>
+
+
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    RF_ID, RF_ROLE_ID, RF_RIGHT_CODE
+  </sql>
+  <select id="selectByExample" parameterType="com.hll.pojo.SysRoleRightExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from SSM_CRM.SYS_ROLE_RIGHT
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from SSM_CRM.SYS_ROLE_RIGHT
+    where RF_ID = #{rfId,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from SSM_CRM.SYS_ROLE_RIGHT
+    where RF_ID = #{rfId,jdbcType=DECIMAL}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.hll.pojo.SysRoleRightExample">
+    delete from SSM_CRM.SYS_ROLE_RIGHT
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.hll.pojo.SysRoleRight">
+    insert into SSM_CRM.SYS_ROLE_RIGHT (RF_ID, RF_ROLE_ID, RF_RIGHT_CODE
+      )
+    values (#{rfId,jdbcType=DECIMAL}, #{rfRoleId,jdbcType=DECIMAL}, #{rfRightCode,jdbcType=DECIMAL}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.hll.pojo.SysRoleRight">
+    insert into SSM_CRM.SYS_ROLE_RIGHT
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="rfId != null">
+        RF_ID,
+      </if>
+      <if test="rfRoleId != null">
+        RF_ROLE_ID,
+      </if>
+      <if test="rfRightCode != null">
+        RF_RIGHT_CODE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="rfId != null">
+        #{rfId,jdbcType=DECIMAL},
+      </if>
+      <if test="rfRoleId != null">
+        #{rfRoleId,jdbcType=DECIMAL},
+      </if>
+      <if test="rfRightCode != null">
+        #{rfRightCode,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+
+
+  <!--增加角色权限-->
+    <insert id="insertOne" parameterType="map">
+      INSERT INTO SSM_CRM.SYS_ROLE_RIGHT ( RF_ID, RF_ROLE_ID, RF_RIGHT_CODE )
+      VALUES
+             (
+                     SYS_ROLE_RIGHT_ID.nextval,
+                     #{rid},
+                     (SELECT RIGHT_CODE FROM SYS_RIGHT WHERE RIGHT_TIP = #{name}))
+    </insert>
+
+
+    <select id="countByExample" parameterType="com.hll.pojo.SysRoleRightExample" resultType="java.lang.Long">
+    select count(*) from SSM_CRM.SYS_ROLE_RIGHT
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <!--根据角色id查询出所有权限-->
+    <select id="getCompetence" resultType="com.hll.pojo.SysRoleRight" resultMap="CompetenceMap">
+      SELECT
+        * FROM SYS_ROLE_RIGHT a,
+        SYS_RIGHT b
+      WHERE
+        a.RF_RIGHT_CODE = b.RIGHT_CODE
+        AND a.RF_ROLE_ID = #{rid}
+    </select>
+  <!--查询管理员的权限-->
+    <select id="getAdmin" resultType="com.hll.pojo.RoleRight" parameterType="integer">
+      SELECT
+             s.RIGHT_TEXT NAME,
+             s.RIGHT_TIP VALUE
+      FROM
+           SYS_RIGHT s
+      WHERE
+              s.SYS_FUN_ID =#{id}
+    </select>
+    <!--获取指定角色的权限名集合-->
+    <select id="getRoleRight" resultType="com.hll.utils.RightUtils">
+        SELECT
+               RIGHT_TIP NAME
+        FROM
+             SYS_ROLE_RIGHT,
+             SYS_RIGHT
+        WHERE
+                RF_RIGHT_CODE = RIGHT_CODE
+          AND RF_ROLE_ID = #{rid}
+    </select>
+    <update id="updateByExampleSelective" parameterType="map">
+    update SSM_CRM.SYS_ROLE_RIGHT
+    <set>
+      <if test="record.rfId != null">
+        RF_ID = #{record.rfId,jdbcType=DECIMAL},
+      </if>
+      <if test="record.rfRoleId != null">
+        RF_ROLE_ID = #{record.rfRoleId,jdbcType=DECIMAL},
+      </if>
+      <if test="record.rfRightCode != null">
+        RF_RIGHT_CODE = #{record.rfRightCode,jdbcType=DECIMAL},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update SSM_CRM.SYS_ROLE_RIGHT
+    set RF_ID = #{record.rfId,jdbcType=DECIMAL},
+      RF_ROLE_ID = #{record.rfRoleId,jdbcType=DECIMAL},
+      RF_RIGHT_CODE = #{record.rfRightCode,jdbcType=DECIMAL}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hll.pojo.SysRoleRight">
+    update SSM_CRM.SYS_ROLE_RIGHT
+    <set>
+      <if test="rfRoleId != null">
+        RF_ROLE_ID = #{rfRoleId,jdbcType=DECIMAL},
+      </if>
+      <if test="rfRightCode != null">
+        RF_RIGHT_CODE = #{rfRightCode,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where RF_ID = #{rfId,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hll.pojo.SysRoleRight">
+    update SSM_CRM.SYS_ROLE_RIGHT
+    set RF_ROLE_ID = #{rfRoleId,jdbcType=DECIMAL},
+      RF_RIGHT_CODE = #{rfRightCode,jdbcType=DECIMAL}
+    where RF_ID = #{rfId,jdbcType=DECIMAL}
+  </update>
+</mapper>
